@@ -20,7 +20,7 @@ const registerDo = async (req, res, next) => {
     } else {
       return next(e);
     }
-    return res.render("register", {  errors: flash("error") });
+    return res.render("register", { errors: flash("error") });
   }
   res.redirect("/");
 };
