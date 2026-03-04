@@ -17,9 +17,10 @@ router.route('/').get(getJobs)
                   .post(createJob);
 router.get('/new', jobForm)
 router.get('/edit/:id', jobForm)
-router.get('/delete/:id', deleteJob)
+router.post('/delete/:id', deleteJob)
 
-router.route("/:id").get(getJob).post(updateJob)
+router.route("/:id").get(getJob)
+                    .post(updateJob)
 // .delete(deleteJob)
 
 

@@ -6,23 +6,25 @@ const csrf = require("host-csrf");
 const getJobs = async (req, res) => {
     console.log("get all jobs")
     const { _id: userId } = req.user;
+    const token = csrf.refreshToken(req, res);
    
     const jobs = await Job.find({ createdBy: userId });
 
-    res.render("jobs", { jobs });
+    res.render("jobs", { jobs, csrfToken: token });
 
 }
 const getJob = async (req, res) => {
     console.log("get single job")
     const {_id: userId} = req.user;
     const {id: jobId} = req.params
+    const token = csrf.refreshToken(req, res);
    
     const job = await Job.findOne({
         createdBy: userId,
         _id: jobId
     });
 
-    res.render("jobs", {jobs: [job]});
+    res.render("jobs", {jobs: [job], csrfToken: token});
 
 }
 const createJob = async (req, res) => {
