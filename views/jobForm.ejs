@@ -1,0 +1,31 @@
+<%- include("partials/head.ejs") %>
+    <%- include("partials/header.ejs") %>
+        <% if (job) { %>
+            <form method="POST" action="/jobs/<%= job._id %>">
+                <% } else { %>
+                    <form method="POST" action="/jobs">
+                        <% } %>
+
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <div>
+                                <label name="company">Company:</label>
+                                <input name="company" value="<%= job ? job.company : '' %>" />
+                            </div>
+                            <div>
+                                <label name="position">Position:</label>
+                                <input name="position" value="<%= job ? job.position : '' %>" />
+                            </div>
+                            <div>
+                                <label name="status">Status:</label>
+                                <input name="status" value="<%= job ? job.status : '' %>" />
+                            </div>
+                            <div>
+                                <button>
+                                    <%= job ? 'Update Job' : 'Add Job' %>
+                                </button>
+                                <a href="/jobs">
+                                    <button type="button">Cancel</button>
+                                </a>
+                            </div>
+                    </form>
+                    <%- include("partials/footer.ejs") %>
