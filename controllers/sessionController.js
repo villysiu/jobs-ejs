@@ -1,18 +1,24 @@
 const User = require("../models/User");
 const parseVErr = require("../util/parseValidationErr");
+const csrf = require("host-csrf");
+
 
 const registerShow = (req, res) => {
-  res.render("register");
+  const token = csrf.refreshToken(req, res);
+  res.render("register", {csrfToken: token });
 };
 
 const registerDo = async (req, res, next) => {
+  console.log("registering a user")
+  console.log(req.body)
   if (req.body.password != req.body.password1) {
     req.flash("error", "The passwords entered do not match.");
-    return res.render("register", {  errors: flash("error") });
+    return res.render("register", {  errors: req.flash("error"), csrfToken: csrf.refreshToken(req, res) });
   }
   try {
     await User.create(req.body);
   } catch (e) {
+
     if (e.constructor.name === "ValidationError") {
       parseVErr(e, req);
     } else if (e.name === "MongoServerError" && e.code === 11000) {
@@ -20,7 +26,7 @@ const registerDo = async (req, res, next) => {
     } else {
       return next(e);
     }
-    return res.render("register", {  errors: flash("error") });
+    return res.status(400).render("register", {  errors: req.flash("error"), csrfToken: csrf.refreshToken(req, res) });
   }
   res.redirect("/");
 };
@@ -35,6 +41,8 @@ const logoff = (req, res) => {
 };
 
 const logonShow = (req, res) => {
+  const token = csrf.refreshToken(req, res);
+  
   if (req.user) {
     return res.redirect("/");
   }
@@ -42,7 +50,7 @@ const logonShow = (req, res) => {
     // errors: req.flash("error"),
     // info: req.flash("info"),
   // });
-  res.render("logon");
+  res.render("logon", {csrfToken: token });
 };
 
 module.exports = {

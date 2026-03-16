@@ -4,7 +4,7 @@ const csrf = require("host-csrf");
 
 
 const getJobs = async (req, res) => {
-    console.log("get all jobs")
+    // console.log("get all jobs ")
     const { _id: userId } = req.user;
     const token = csrf.refreshToken(req, res);
    
@@ -14,7 +14,7 @@ const getJobs = async (req, res) => {
 
 }
 const getJob = async (req, res) => {
-    console.log("get single job")
+    // console.log("get single job")
     const {_id: userId} = req.user;
     const {id: jobId} = req.params
     const token = csrf.refreshToken(req, res);
@@ -28,12 +28,12 @@ const getJob = async (req, res) => {
 
 }
 const createJob = async (req, res) => {
-    console.log('create')
+
     const {_id: userId} = req.user;
     // const {company, position, status} = req.body;
     const job = await Job.create({
         ...req.body,
-        createdBy: req.user
+        createdBy: req.user._id
     })
 
     req.flash("info", "New job created.");
